@@ -7,6 +7,14 @@ Being a collection of scripts and bits found or created over time.
 **[The Analects, Shu-Er](http://ctext.org/analects/shu-er#n1270)**
 
 
-[CC BY-SA 3.0](http://creativecommons.org/licenses/by-sa/3.0/)
+## Licenses
+
+All files [CC BY-SA 3.0](http://creativecommons.org/licenses/by-sa/3.0/) unless otherwise specified.
+
+### Third party licenses
+
+Third party libraries or resources may be included in this project under their respective licenses.
+
+- [Twitter Bootstrap](http://twitter.github.com/bootstrap/) ([Apache 2.0](Apache License v2.0))
 
 
