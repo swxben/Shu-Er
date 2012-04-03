@@ -45,9 +45,6 @@ $message = ob_get_contents();
 ob_end_clean();
 $otfm->mail($message);
 
-// do redirection
-$otfm->failure();
-
 
 
 function e($s) { echo($s); }
@@ -59,11 +56,40 @@ class OneTrueFormMailer {
 	var $settings = null;
 
 	function OneTrueFormMailer($settings) {
-		$this->rsettings = $settings;
+		$this->settings = $settings;
 	}
 
 	function mail($message) {
-		e($message);die();
+		extract($this->settings);
+		if (!isset($to)) $to = $this->settings['to'];
+		if (!isset($subject)) $subject = $this->settings['subject'];
+		if (!isset($from)) $from = $to;
+		
+		$boundary = md5(uniqid(time()));
+		
+		$headers = 
+			"From: {$from}".PHP_EOL.
+			"Return-Path: {$from}".PHP_EOL.
+			"Reply-To: {$from}".PHP_EOL.
+			"MIME-Version: 1.0".PHP_EOL.
+			"Content-Type: multipart/mixed; boundary=\"{$boundary}\"".PHP_EOL;
+
+		$content =
+			"--{$boundary}".PHP_EOL.
+			"Content-type: text/html; charset=iso-8859-1".PHP_EOL.
+			"Content-Transfer-Encoding: 7bit".PHP_EOL.
+			PHP_EOL.
+			$message.PHP_EOL.
+			PHP_EOL;
+
+		$result = mail(
+			$to,
+			$subject,
+			$content,
+			$headers
+			);
+		if (!$result) die();// return $this->failure();
+		return $this->success();
 	}
 
 	function getFormValues($request) {
