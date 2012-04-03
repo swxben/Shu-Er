@@ -16,9 +16,12 @@
 		<div class="container">
 			<div class="page-header">
 				<h1>One True Form Mailer</h1>
+				<p>To test this form use a null SMTP relay like <a href="http://smtp4dev.codeplex.com">smtp4dev</a>.</p>
 			</div>
 
-			<form class="form-horizontal" method="post" action="onetrueformmailer.php">
+
+			<!-- Simple contact form -->
+			<form class="form-horizontal" method="get" action="onetrueformmailer.php">
 				<fieldset>
 					<legend>Simple contact form</legend>
 					<div class="control-group">
@@ -45,7 +48,13 @@
 				</fieldset>
 			</form>
 
+			<!-- Header injection test -->
+			<h2>Header injection test</h2>
+			<p>To see the attack succeed, disable checks in <code>OneTrueFormMailer.sendIt()</code> and set the configured <code>from</code> to be <code>$_REQUEST['email']</code>.</p>
+			<p><a href="header_injection_test.php">header injection test.php</a></p>
+
 			<footer>
+				<hr/>
 				<a href="http://ciplit.com.au">CIPL IT Services</a>
 			</footer>
 		</div>

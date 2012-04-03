@@ -3,7 +3,8 @@
 // CC BY-SA 3.0
 // See https://github.com/ciplit/Shu-Er
 
-// Configure the mailer. Avoid putting values from the form in this configuration.
+// Configure the mailer.
+// Avoid putting values from the form in this configuration.
 $otfm = new OneTrueFormMailer(array(
 	'success' => 'success.html',
 	'failure' => 'failure.html',
@@ -46,6 +47,12 @@ function e($s) { echo($s); }
 function h($s) { return htmlentities($s); }
 function eh($s) { e(h($s)); }
 function ep($s) { e(nl2br(h($s))); }
+function pr($o) { e('<pre>'); print_r($o); e('</pre>'); }
+function str_contains($source, $search) {
+	if (!is_array($search)) return strpos($source, $search) !== FALSE;
+	foreach ($search as $s) if (str_contains($source, $s)) return true;
+	return false;
+}
 
 class OneTrueFormMailer {
 	var $settings = null;
@@ -64,6 +71,9 @@ class OneTrueFormMailer {
 		if (!isset($to)) $to = $this->settings['to'];
 		if (!isset($subject)) $subject = $this->settings['subject'];
 		if (!isset($from)) $from = $to;
+
+		$this->__checkForHeaderInjection(array($message, $to, $subject, $from));
+		$this->__checkReferrer();
 		
 		$boundary = md5(uniqid(time()));
 		
@@ -106,6 +116,17 @@ class OneTrueFormMailer {
 		header('Status: 302');
 		header("Location: {$url}");
 		die();
+	}
+	function __checkForHeaderInjection($inputs) {
+		$injectionPrej = 
+			'/\b^to+(?=:)\b|^content-type:|^cc:|^bcc:|^from:|^subject:|^mime-version:|^content-transfer-encoding:/im';
+		foreach ($inputs as $s) {
+			if (preg_match($injectionPrej, $s)) $this->failure();
+		}
+	}
+	function __checkReferrer() {
+		if (empty($_SERVER['HTTP_REFERER'])) $this->failure();
+		if (!str_contains($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST'])) $this->failure();
 	}
 }
 
