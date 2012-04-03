@@ -16,7 +16,7 @@
 		<div class="container">
 			<div class="page-header">
 				<h1>One True Form Mailer</h1>
-				<p>To test this form use a null SMTP relay like <a href="http://smtp4dev.codeplex.com">smtp4dev</a>.</p>
+				<p class="help-block">To test this form use a null SMTP relay like <a href="http://smtp4dev.codeplex.com">smtp4dev</a>.</p>
 			</div>
 
 
@@ -45,13 +45,54 @@
 
 					<div class="form-actions">
 						<button type="submit" class="btn btn-primary">Submit</button>
+						<p class="help-block"><code>GET</code> or <code>POST</code> should both work for this type of contact form.</p>
 				</fieldset>
 			</form>
 
 			<!-- Header injection test -->
-			<h2>Header injection test</h2>
-			<p>To see the attack succeed, disable checks in <code>OneTrueFormMailer.sendIt()</code> and set the configured <code>from</code> to be <code>$_REQUEST['email']</code>.</p>
-			<p><a href="header_injection_test.php">header injection test.php</a></p>
+			<form class="form-horizontal" method="get" action="header_injection_test.php">
+				<fieldset>
+					<legend>Header injection test</legend>
+					<div class="form-actions">
+						<button type="submit" class="btn btn-primary">Submit</button>
+							<p class="help-block">This should redirect to the fail page. The attack is performed in <code>header_injection_test.php</code>. To see the attack succeed, disable checks in <code>OneTrueFormMailer.sendIt()</code> and set the configured <code>from</code> to be <code>$_REQUEST['email']</code>.</p>
+					</div>
+				</fieldset>
+			</form>
+
+			<!-- Attachment test -->
+			<form class="form-horizontal" method="post" enctype="multipart/form-data" action="onetrueformmailer.php">
+				<input type="hidden" name="contactname" value="Attachment test"/>
+				<input type="hidden" name="email" value="test@ciplit.com.au"/>
+				<input type="hidden" name="message" value="Testing OTFM's attachment feature"/>
+
+				<fieldset>
+					<legend>Attachment test</legend>
+					<div class="control-group">
+						<label class="control-label" for="attachment1">Attach a file</label>
+						<div class="controls">
+							<input type="file" class="input x-large" name="attachment1" id="attachment1"/>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="attachment2">Attach a file</label>
+						<div class="controls">
+							<input type="file" class="input x-large" name="attachment2" id="attachment2"/>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="attachment3">Attach a file</label>
+						<div class="controls">
+							<input type="file" class="input x-large" name="attachment3" id="attachment3"/>
+						</div>
+					</div>
+
+					<div class="form-actions">
+						<button type="submit" class="btn btn-primary">Submit</button>
+						<p class="help-block">For attachments to work properly, the form's <code>method</code> must be <code>post</code> and the <code>enctype</code> must be <code>multipart/form-data</code>.</p>
+				</fieldset>
+			</form>
+
 
 			<footer>
 				<hr/>
