@@ -22,10 +22,10 @@ Some helper methods exist for printing fields within the email template:
 
 - `eh($s)` - converts to HTML entities (to reduce injection attacks) then prints
 - `ep($s)` - converts to HTML entities, then replaces new line characters with line breaks, then prints. Useful for printing `textarea` fields.
-- `pr($o)` - pretty prints an object wrapped in `<pre>` tags. Useful for debugging (`<?php pr($_REQUEST); ?> dumps the entire request)
+- `pr($o)` - pretty prints an object wrapped in `<pre>` tags. Useful for debugging (`<?php pr($_REQUEST); ?>` dumps the entire request)
 
 
-This example template just dumps out all fields in the submitted request, which could be useful if you don't want to maintain the script with the form, or don't neccessarily know what fields are coming in.
+This example template just dumps out all fields in the submitted request, which could be useful if you don't want to maintain the script with the form, or don't know what fields are coming in.
 
 	<html>
 		<body>
@@ -48,6 +48,7 @@ Attachments are added one by one by calling:
 
 If a file isn't selected, `addAttachment()` will silently skip it, so validation needs to be done client-side or manually.
 
-To add all attachments, do the following (but be aware that this would allow an attacker to abuse the attachments):
+To add all attachments, do the following (but be aware that this would allow an attacker to add arbitrary attachments):
 
 	foreach ($_FILES as $k => $v) $otfm->addAttachment($k);
+
