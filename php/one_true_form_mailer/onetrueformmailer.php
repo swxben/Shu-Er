@@ -16,7 +16,7 @@ $otfm = new OneTrueFormMailer(array(
 // remove this line if empty forms are OK
 if (empty($_REQUEST)) $otfm->failure();
 
-// Build up your HTML email (use eh() etc to further sanitise form values for HTML):
+// Build up your HTML email:
 ?>
 <html>
 	<body>
@@ -33,7 +33,21 @@ if (empty($_REQUEST)) $otfm->failure();
 </html>
 <?php
 
-
+// This example just dumps all fields:
+/*
+?>
+<html>
+	<body>
+		<dl>
+			<?php foreach ($_REQUEST as $k => $v) { ?>
+				<dt><?php eh($k); ?></dt>
+				<dd><?php ep($v); ?></dd>
+			<?php } ?>
+		</dl>
+	</body>
+</html>
+<?php
+*/
 
 // ----- NOTHING BELOW THIS LINE NEEDS TO BE CHANGED -----
 
@@ -41,6 +55,7 @@ if (empty($_REQUEST)) $otfm->failure();
 
 $otfm->sendIt();
 
+function form($f) { eh($_REQUEST[$f]); }
 function e($s) { echo($s); }
 function h($s) { return htmlentities($s); }
 function eh($s) { e(h($s)); }
