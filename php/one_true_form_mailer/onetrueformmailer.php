@@ -3,23 +3,19 @@
 // CC BY-SA 3.0
 // See https://github.com/ciplit/Shu-Er
 
-// Do not move this line:
-ob_start();
-
-// user configuration
-	// from, to, subject, redirect
+// Configure the mailer. Avoid putting values from the form in this configuration.
 $otfm = new OneTrueFormMailer(array(
-	'redirectSuccess' => 'success.html',
-	'redirectFailure' => 'failure.html',
+	'success' => 'success.html',
+	'failure' => 'failure.html',
 	'from' => 'helloworld@ciplit.com.au',
 	'to' => 'helloworld@ciplit.com.au',
 	'subject' => 'One True Form Mailer Test'
 ));
 
-// get form values
+// Get form values from the request (sanitised for header injection)
 $formValues = $otfm->getFormValues($_REQUEST);
 
-// build message to mail, use ob_XXX() methods to generate HTML message
+// Build up your HTML email (use eh() etc to further sanitise form values for HTML):
 ?>
 <html>
 	<body>
@@ -40,12 +36,9 @@ $formValues = $otfm->getFormValues($_REQUEST);
 
 // ----- NOTHING BELOW THIS LINE NEEDS TO BE CHANGED -----
 
-// mail it
-$message = ob_get_contents();
-ob_end_clean();
-$otfm->mail($message);
 
 
+$otfm->sendIt();
 
 function e($s) { echo($s); }
 function h($s) { return htmlentities($s); }
@@ -57,9 +50,14 @@ class OneTrueFormMailer {
 
 	function OneTrueFormMailer($settings) {
 		$this->settings = $settings;
+		ob_clean();
+		ob_start();
 	}
 
-	function mail($message) {
+	function sendIt() {
+		$message = ob_get_contents();
+		ob_end_clean();
+
 		extract($this->settings);
 		if (!isset($to)) $to = $this->settings['to'];
 		if (!isset($subject)) $subject = $this->settings['subject'];
@@ -100,8 +98,8 @@ class OneTrueFormMailer {
 		return $formValues;
 	}
 
-	function success() { $this->redirectTo($this->settings['redirectSuccess']); }
-	function failure() { $this->redirectTo($this->settings['redirectFailure']); }
+	function success() { $this->redirectTo($this->settings['success']); }
+	function failure() { $this->redirectTo($this->settings['failure']); }
 	function redirectTo($url) { 
 		header('Status: 302');
 		header("Location: {$url}");
