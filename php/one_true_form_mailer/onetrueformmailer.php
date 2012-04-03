@@ -14,6 +14,8 @@ $otfm = new OneTrueFormMailer(array(
 
 // Get form values from the request (sanitised for header injection)
 $formValues = $otfm->getFormValues($_REQUEST);
+// remove this line if empty forms are OK
+if (empty($formValues)) $otfm->failure();
 
 // Build up your HTML email (use eh() etc to further sanitise form values for HTML):
 ?>
