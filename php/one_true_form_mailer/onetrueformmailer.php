@@ -23,9 +23,15 @@ $formValues = $otfm->getFormValues($_REQUEST);
 ?>
 <html>
 	<body>
-		<pre>
-			<?php var_dump($formValues); ?>
-		</pre>
+		<p>Received a contact message:</p>
+		<p>
+			<strong>Name:</strong> <?php eh($formValues['contactname']); ?><br/>
+			<strong>Email:</strong> <a href="mailto:<?php eh($formValues['email']); ?>"><?php eh($formValues['email']); ?></a><br/>
+			<strong>Message:</strong>
+		</p>
+		<blockquote>
+			<?php ep($formValues['message']); ?><br/>
+		</blockquote>
 	</body>
 </html>
 <?php
@@ -47,6 +53,7 @@ $otfm->failure();
 function e($s) { echo($s); }
 function h($s) { return htmlentities($s); }
 function eh($s) { e(h($s)); }
+function ep($s) { e(nl2br(h($s))); }
 
 class OneTrueFormMailer {
 	var $settings = null;
@@ -56,7 +63,7 @@ class OneTrueFormMailer {
 	}
 
 	function mail($message) {
-		eh($message);die();
+		e($message);die();
 	}
 
 	function getFormValues($request) {
