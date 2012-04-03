@@ -13,10 +13,8 @@ $otfm = new OneTrueFormMailer(array(
 	'subject' => 'One True Form Mailer Test'
 ));
 
-// Get form values from the request (sanitised for header injection)
-$formValues = $otfm->getFormValues($_REQUEST);
 // remove this line if empty forms are OK
-if (empty($formValues)) $otfm->failure();
+if (empty($_REQUEST)) $otfm->failure();
 
 // Build up your HTML email (use eh() etc to further sanitise form values for HTML):
 ?>
@@ -24,12 +22,12 @@ if (empty($formValues)) $otfm->failure();
 	<body>
 		<p>Received a contact message:</p>
 		<p>
-			<strong>Name:</strong> <?php eh($formValues['contactname']); ?><br/>
-			<strong>Email:</strong> <a href="mailto:<?php eh($formValues['email']); ?>"><?php eh($formValues['email']); ?></a><br/>
+			<strong>Name:</strong> <?php eh($_REQUEST['contactname']); ?><br/>
+			<strong>Email:</strong> <a href="mailto:<?php eh($_REQUEST['email']); ?>"><?php eh($_REQUEST['email']); ?></a><br/>
 			<strong>Message:</strong>
 		</p>
 		<blockquote>
-			<?php ep($formValues['message']); ?><br/>
+			<?php ep($_REQUEST['message']); ?><br/>
 		</blockquote>
 	</body>
 </html>
@@ -100,14 +98,6 @@ class OneTrueFormMailer {
 			);
 		if (!$result) die();// return $this->failure();
 		return $this->success();
-	}
-
-	function getFormValues($request) {
-		$formValues = array();
-		foreach ($request as $key => $val) {
-			$formValues[$key] = $val;
-		}
-		return $formValues;
 	}
 
 	function success() { $this->redirectTo($this->settings['success']); }
