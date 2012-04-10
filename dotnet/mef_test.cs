@@ -1,3 +1,5 @@
+// Simple MEF demo showing loading all implementations of an interface into a collection.
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
