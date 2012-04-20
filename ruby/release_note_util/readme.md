@@ -6,7 +6,7 @@
 Use it by running `addnote.rb` in the console, then type the release note and press enter. If 
 you don't enter anything and just press enter it cancels the add.
 
-The entered note is copied to the clipboard, for your hg/git commit message pleasure. See also our AutoHotKey script for enabling `ctrl-v` to paste directly to cmd/powershell.
+The entered note is copied to the clipboard, for your hg/git commit message pleasure. See also our AutoHotKey script for enabling `ctrl-v` to [paste to cmd/powershell](https://github.com/ciplit/Shu-Er/blob/master/autohotkey/paste_to_console.ahk).
 
 
 ## Release note file
