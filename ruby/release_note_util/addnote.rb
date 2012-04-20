@@ -1,4 +1,7 @@
+# This uses the clipboard gem: `gem install clipboard`, `gem install ffi`
+
 require 'fileutils'
+require 'clipboard'
 
 note = gets.chomp
 if note.empty?
@@ -31,4 +34,6 @@ end
 FileUtils.rm original_filename
 FileUtils.mv temp_filename, original_filename
 
-puts 'Added note'
+Clipboard.copy note
+
+puts 'Added note and copied to clipboard'
