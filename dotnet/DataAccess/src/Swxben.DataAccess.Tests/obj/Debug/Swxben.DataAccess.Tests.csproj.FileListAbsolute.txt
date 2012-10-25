@@ -1,0 +1,11 @@
+C:\Development\swxben\shu-er\dotnet\DataAccess\src\Swxben.DataAccess.Tests\bin\Debug\Swxben.DataAccess.Tests.dll
+C:\Development\swxben\shu-er\dotnet\DataAccess\src\Swxben.DataAccess.Tests\bin\Debug\Swxben.DataAccess.Tests.pdb
+C:\Development\swxben\shu-er\dotnet\DataAccess\src\Swxben.DataAccess.Tests\obj\Debug\ResolveAssemblyReference.cache
+C:\Development\swxben\shu-er\dotnet\DataAccess\src\Swxben.DataAccess.Tests\obj\Debug\Swxben.DataAccess.Tests.dll
+C:\Development\swxben\shu-er\dotnet\DataAccess\src\Swxben.DataAccess.Tests\obj\Debug\Swxben.DataAccess.Tests.pdb
+C:\Development\swxben\shu-er\dotnet\DataAccess\src\Swxben.DataAccess.Tests\bin\Debug\nunit.framework.dll
+C:\Development\swxben\shu-er\dotnet\DataAccess\src\Swxben.DataAccess.Tests\bin\Debug\Shouldly.dll
+C:\Development\swxben\shu-er\dotnet\DataAccess\src\Swxben.DataAccess.Tests\bin\Debug\Swxben.DataAccess.dll
+C:\Development\swxben\shu-er\dotnet\DataAccess\src\Swxben.DataAccess.Tests\bin\Debug\Swxben.DataAccess.pdb
+C:\Development\swxben\shu-er\dotnet\DataAccess\src\Swxben.DataAccess.Tests\bin\Debug\nunit.framework.xml
+C:\Development\swxben\shu-er\dotnet\DataAccess\src\Swxben.DataAccess.Tests\bin\Debug\Shouldly.pdb
