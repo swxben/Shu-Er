@@ -2,14 +2,14 @@
 using System.Linq;
 using NUnit.Framework;
 using Shouldly;
-using SwxBen.DataAccess;
+using SwxBen;
 
-namespace Swxben.DataAccess.Tests
+namespace Tests
 {
     [TestFixture]
     public class can_use_a_simple_table
     {
-        IDataAccess _dataAccess = new MSSQLDataAccess(@"Server=.\sqlexpress; Database=swxben_dataaccess; User Id=sa; Password=test;");
+        IDataAccess _dataAccess = new DataAccess(@"Server=.\sqlexpress; Database=swxben_dataaccess; User Id=sa; Password=test;");
 
         [SetUp, TearDown]
         public void set_up_and_tear_down()

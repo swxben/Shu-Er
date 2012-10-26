@@ -8,8 +8,8 @@
     <ProjectGuid>{5B9AFF58-4D74-416E-A655-18FF95E52C6B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Swxben.DataAccess</RootNamespace>
-    <AssemblyName>Swxben.DataAccess</AssemblyName>
+    <RootNamespace>Swxben</RootNamespace>
+    <AssemblyName>DataAccess</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

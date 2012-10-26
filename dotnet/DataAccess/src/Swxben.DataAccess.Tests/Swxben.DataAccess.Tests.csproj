@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="can_insert_null_into_a_column.cs" />
     <Compile Include="can_use_a_simple_table.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

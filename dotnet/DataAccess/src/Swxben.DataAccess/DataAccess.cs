@@ -4,7 +4,7 @@ using System.Data.SqlClient;
 using System.Dynamic;
 using System.Linq;
 
-namespace SwxBen.DataAccess
+namespace SwxBen
 {
     public interface IDataAccess
     {
@@ -13,11 +13,11 @@ namespace SwxBen.DataAccess
         IEnumerable<T> ExecuteQuery<T>(string sql, object parameters = null) where T : new();
     }
 
-    public class MSSQLDataAccess : IDataAccess
+    public class DataAccess : IDataAccess
     {
         string _connectionString = "";
 
-        public MSSQLDataAccess(string connectionString)
+        public DataAccess(string connectionString)
         {
             _connectionString = connectionString;
         }
@@ -112,7 +112,7 @@ namespace SwxBen.DataAccess
 
             parameter.Value = value == null ? DBNull.Value : value;
 
-            if (value.GetType() == typeof(string))
+            if (value != null && value.GetType() == typeof(string))
             {
                 parameter.Size = ((string)value).Length > 4000 ? -1 : 4000;
             }
