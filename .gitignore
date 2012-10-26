@@ -1,4 +1,28 @@
+# Build and system artifacts:
+[Oo]bj/
+[Bb]in/
+[Dd]ebug/
+[Rr]elease/
+x64/
+
+*.user
+*.cache
+*.suo
+
+TestResult.xml
+grep.txt
+Thumbs.db
+*_install_*.exe
+StyleCop.Cache
+packages/
+*.sublime-workspace
+
+# Temp files (eg VIM)
+*.*~
+~$*.xlsx
+~*.tmp
+~$*.docx
+*.orig
 .DS_Store
 .~lock*
 ~$*
-TestResult.xml
