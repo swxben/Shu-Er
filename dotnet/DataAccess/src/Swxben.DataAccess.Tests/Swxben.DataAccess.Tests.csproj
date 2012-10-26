@@ -8,7 +8,7 @@
     <ProjectGuid>{9A9D2DB6-25B7-4C1F-A682-1E71B40CA72D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Swxben.DataAccess.Tests</RootNamespace>
+    <RootNamespace>Tests</RootNamespace>
     <AssemblyName>Swxben.DataAccess.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="can_insert_null_into_a_column.cs" />
+    <Compile Include="can_read_and_write_enums_as_a_string_field.cs" />
     <Compile Include="can_use_a_simple_table.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

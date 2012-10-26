@@ -1,5 +1,0 @@
-C:\Development\swxben\shu-er\dotnet\DataAccess\src\Swxben.DataAccess\obj\Debug\ResolveAssemblyReference.cache
-C:\Development\swxben\shu-er\dotnet\DataAccess\src\Swxben.DataAccess\bin\Debug\DataAccess.dll
-C:\Development\swxben\shu-er\dotnet\DataAccess\src\Swxben.DataAccess\bin\Debug\DataAccess.pdb
-C:\Development\swxben\shu-er\dotnet\DataAccess\src\Swxben.DataAccess\obj\Debug\DataAccess.dll
-C:\Development\swxben\shu-er\dotnet\DataAccess\src\Swxben.DataAccess\obj\Debug\DataAccess.pdb

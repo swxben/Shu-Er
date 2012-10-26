@@ -69,11 +69,23 @@ namespace SwxBen
 
                 foreach (var property in typeof(T).GetProperties().Where(p => resultDictionary.ContainsKey(p.Name)))
                 {
-                    property.SetValue(t, resultDictionary[property.Name], null);
+                    var value = resultDictionary[property.Name];
+                    if (value != null && value is string && property.PropertyType.IsEnum)
+                    {
+                        value = Enum.Parse(property.PropertyType, value as string);
+                    }
+
+                    property.SetValue(t, value, null);
                 }
                 foreach (var field in typeof(T).GetFields().Where(f => resultDictionary.ContainsKey(f.Name)))
                 {
-                    field.SetValue(t, resultDictionary[field.Name]);
+                    var value = resultDictionary[field.Name];
+                    if (value != null && value is string && field.FieldType.IsEnum)
+                    {
+                        value = Enum.Parse(field.FieldType, value as string);
+                    }
+
+                    field.SetValue(t, value);
                 }
 
                 return t;
@@ -109,6 +121,8 @@ namespace SwxBen
         {
             var parameter = command.CreateParameter();
             parameter.ParameterName = string.Format("@{0}", name);
+
+            if (value != null && value.GetType().IsEnum) value = value.ToString();
 
             parameter.Value = value == null ? DBNull.Value : value;
 
