@@ -15,6 +15,10 @@ namespace SwxBen
         void Insert<T>(T value);
         void Update<T>(T value, string id);
         void DropTable(string tableName);
+        IEnumerable<T> Select<T>(
+            object criteria = null,
+            string orderBy = null
+            ) where T : new();
     }
 
     public class DataAccess : IDataAccess
@@ -190,9 +194,46 @@ namespace SwxBen
 
         private static IEnumerable<string> GetAllFieldNames<T>()
         {
+            return GetAllFieldNames(typeof(T));
+        }
+        private static IEnumerable<string> GetAllFieldNames(Type t)
+        {
             return
-                typeof(T).GetFields().Select(f => f.Name)
-                .Concat(typeof(T).GetProperties().Select(p => p.Name));
+                t.GetFields().Select(f => f.Name)
+                .Concat(t.GetProperties().Select(p => p.Name));
+        }
+
+        public IEnumerable<T> Select<T>(
+            object criteria = null,
+            string orderBy = null
+            ) where T : new()
+        {
+            var sql = GetSelectSqlFor<T>(criteria, orderBy);
+            return ExecuteQuery<T>(sql, criteria);
+        }
+
+        public static string GetSelectSqlFor<T>(
+            object criteria = null,
+            string orderBy = null)
+        {
+            var where = new StringBuilder();
+            if (criteria != null)
+            {
+                where.Append(" WHERE 1=1 ");
+
+                foreach (var field in GetAllFieldNames(criteria.GetType()))
+                {
+                    where.AppendFormat(" AND {0} = @{0}", field);
+                }
+            }
+
+            orderBy = string.IsNullOrEmpty(orderBy) ? "" : string.Format("ORDER BY {0}", orderBy);
+
+            return string.Format(
+                "SELECT * FROM {0}s {1} {2}",
+                typeof(T).Name,
+                where,
+                orderBy);
         }
 
         public void DropTable(string tableName)
