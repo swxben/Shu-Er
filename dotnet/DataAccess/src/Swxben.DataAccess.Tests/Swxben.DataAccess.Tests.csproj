@@ -57,6 +57,7 @@
     <Compile Include="get_insert_sql_is_sane.cs" />
     <Compile Include="get_select_sql_is_sane.cs" />
     <Compile Include="get_update_sql_is_sane.cs" />
+    <Compile Include="nullable_datetime_works.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
