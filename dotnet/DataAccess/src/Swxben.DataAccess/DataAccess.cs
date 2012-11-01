@@ -16,7 +16,7 @@ namespace SwxBen
         void Update<T>(T value, string id);
         void DropTable(string tableName);
         IEnumerable<T> Select<T>(
-            object criteria = null,
+            object where = null,
             string orderBy = null
             ) where T : new();
     }
@@ -206,12 +206,12 @@ namespace SwxBen
         }
 
         public IEnumerable<T> Select<T>(
-            object criteria = null,
+            object where = null,
             string orderBy = null
             ) where T : new()
         {
-            var sql = GetSelectSqlFor<T>(criteria, orderBy);
-            return ExecuteQuery<T>(sql, criteria);
+            var sql = GetSelectSqlFor<T>(where, orderBy);
+            return ExecuteQuery<T>(sql, where);
         }
 
         public static string GetSelectSqlFor<T>(
