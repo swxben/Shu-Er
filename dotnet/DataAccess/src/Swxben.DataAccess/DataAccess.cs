@@ -77,27 +77,29 @@ namespace SwxBen
 
                 foreach (var property in typeof(T).GetProperties().Where(p => resultDictionary.ContainsKey(p.Name)))
                 {
-                    var value = resultDictionary[property.Name];
-                    if (value != null && value is string && property.PropertyType.IsEnum)
-                    {
-                        value = Enum.Parse(property.PropertyType, value as string);
-                    }
-
-                    property.SetValue(t, value, null);
+                    property.SetValue(t, GetValue(resultDictionary[property.Name], property.PropertyType), null);
                 }
                 foreach (var field in typeof(T).GetFields().Where(f => resultDictionary.ContainsKey(f.Name)))
                 {
-                    var value = resultDictionary[field.Name];
-                    if (value != null && value is string && field.FieldType.IsEnum)
-                    {
-                        value = Enum.Parse(field.FieldType, value as string);
-                    }
-
-                    field.SetValue(t, value);
+                    field.SetValue(t, GetValue(resultDictionary[field.Name], field.FieldType));
                 }
 
                 return t;
             });
+        }
+
+        private static object GetValue(object value, Type type)
+        {
+            if (value != null && value is string)
+            {
+                if (type.IsEnum) return Enum.Parse(type, value as string);
+                
+                var underlyingType = Nullable.GetUnderlyingType(type);
+
+                if (underlyingType == null) return value;
+                if (underlyingType.IsEnum) return Enum.Parse(underlyingType, value as string);
+            }
+            return value;
         }
 
         private static SqlCommand GetCommand(string sql, SqlConnection connection, object parameters)
