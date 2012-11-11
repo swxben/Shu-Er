@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>SWXBEN - Bootstrap, CoffeeScript and Knockout - Modal Edit/Add</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen" />
+    <link href="css/site.css" rel="stylesheet" media="screen"/>
+
+    <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <script src="js/jquery.js"></script>
+    <script src="js/jquery.tmpl.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="js/knockout-2.2.0.js"></script>
+    <script src="js/coffee-script.js"></script>
+</head>
+<body>
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container-fluid">
+                <a class="brand" href="http://www.swxben.com">SWXBEN - Bootstrap, CoffeeScript and Knockout - Modal Edit/Add</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span12">
+                <h1>Widgets</h1>
+
+                <table class="table well" id="widgets">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: widgets">
+                        <tr>
+                            <td data-bind="text: name"></td>
+                            <td data-bind="text: formattedPrice()"></td>
+                            <td>
+                                <button data-bind="click: $root.edit">Edit</button>
+                                <button data-bind="click: $root.remove">Remove</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <button data-bind="click: add">Add</button>
+                <br/>
+                <br/>
+
+                <pre data-bind="text: ko.toJSON(widgets)"></pre>
+                <pre data-bind="text: ko.toJSON(selectedWidget)"></pre>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="editor_header" aria-hidden="true" data-backdrop="static" data-keyboard="false" data-bind="
+        template: {
+            name: 'widget_editor',
+            data: selectedWidget
+        },
+        widgetEditor: selectedWidget
+    ">
+    </div>
+    <script id="widget_editor" type="text/html">
+        <form class="form-horizontal" data-bind="submit: $root.save">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-bind="click: $root.cancel">&times;</button>
+                <h3 id="editor_header">Editing widget</h3>
+            </div>
+            <div class="modal-body">
+                    <div class="control-group">
+                        <label class="control-label">Name</label>
+                        <div class="controls">
+                            <input type="text" placeholder="Name" data-bind="value: editName"/>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Price</label>
+                        <div class="controls">
+                            <input type="text" placeholder="Price" data-bind="value: editPrice"/>
+                        </div>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <a class="btn" data-bind="click: $root.cancel">Cancel</a>
+                <button type="submit" class="btn btn-primary" data-bind="click: $root.save">Save</button>
+            </div>
+        </form>
+    </script>
+
+
+    <script type="text/coffeescript">
+        class Widget
+            constructor: (data) ->
+                @name = ko.observable(data.name)
+                @editName = ko.observable(data.name)
+                @price = ko.observable(data.price)
+                @editPrice = ko.observable(data.price);
+                @isNew = data.isNew
+            formattedPrice: => '$' + @price().toFixed(2)
+            save: =>
+                @name(@editName())
+                @price(parseFloat(@editPrice()))
+            cancel: =>
+                @editName(@name())
+                @editPrice(@price())
+
+        class ViewModel
+            constructor: (widgets) ->
+                @widgets = ko.observableArray(widgets)
+                @selectedWidget = ko.observable()
+            edit: (widget) => @selectedWidget(widget)
+            remove: (widget) => @widgets.remove(widget)
+            add: => @selectedWidget(new Widget({ isNew: true }))
+            save: =>
+                widget = @selectedWidget()
+                widget.save()
+                if widget.isNew
+                    @widgets.push(widget)
+                    widget.isNew = false
+                @selectedWidget(null)
+            cancel: =>
+                @selectedWidget().cancel()
+                @selectedWidget(null);
+
+        ko.bindingHandlers.widgetEditor = 
+            init: (element, valueAccessor) => $(element).modal('hide')
+            update: (element, valueAccessor) =>
+                value = ko.utils.unwrapObservable(valueAccessor())
+                if value then $(element).modal() else $(element).modal('hide')
+
+        ko.applyBindings(new ViewModel([
+            new Widget({ name: 'First Widget', price: 12.34 }),
+            new Widget({ name: 'Widget the Second', price: 56.78 })
+        ]))
+    </script>
+
+</body>
+</html>

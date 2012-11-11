@@ -1,0 +1,9 @@
+body {
+	padding-top: 60px;
+	padding-bottom: 40px;
+}
+
+footer#page_footer p {
+	font-size: 8pt;
+	padding: 0 40px;
+}

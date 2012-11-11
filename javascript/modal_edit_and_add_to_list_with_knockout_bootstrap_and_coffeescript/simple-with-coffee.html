@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8"/>
+		<!--[if lt IE 9]>
+		    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<script src="js/jquery.js"></script>
+		<script src="js/jquery.tmpl.js"></script>
+		<script src="js/knockout-2.2.0.js"></script>
+	    <script src="js/coffee-script.js"></script>
+	</head>
+	<body>
+		<table>
+			<thead>
+				<tr><th>Name</th><th>Price</th><th>Controls</th></tr>
+			</thead>
+			<tbody data-bind="foreach: widgets">
+				<tr>
+					<td data-bind="text: name"></td>
+					<td data-bind="text: formattedPrice()"></td>
+					<td>
+						<button data-bind="click: $root.edit">Edit</button>
+						<button data-bind="click: $root.remove">Remove</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<p><button data-bind="click: add">Add</button></p>
+
+
+		<div data-bind="template: { name: 'editor_template', data: selectedWidget }, widgetEditor: selectedWidget"></div>
+		<script id="editor_template" type="text/html">
+			<label>Name: <input data-bind="value: editName"/></label><br/>
+			<label>Price: <input data-bind="value: editPrice"/></label><br/>
+			<button data-bind="click: $root.cancel">Cancel</button>
+			<button data-bind="click: $root.save">Save</button>
+		</script>
+
+		<pre data-bind="text: ko.toJSON(widgets)"></pre>
+		<pre data-bind="text: ko.toJSON(selectedWidget)"></pre>
+
+
+		<script type="text/coffeescript">
+			class Widget
+				constructor: (data) ->
+					@name = ko.observable(data.name)
+					@editName = ko.observable(data.name)
+					@price = ko.observable(data.price)
+					@editPrice = ko.observable(data.price);
+					@isNew = data.isNew
+				formattedPrice: => '$' + @price().toFixed(2)
+				save: =>
+					@name(@editName())
+					@price(parseFloat(@editPrice()))
+				cancel: =>
+					@editName(@name())
+					@editPrice(@price())
+
+			class ViewModel
+				constructor: (widgets) ->
+					@widgets = ko.observableArray(widgets)
+					@selectedWidget = ko.observable()
+				edit: (widget) => @selectedWidget(widget)
+				remove: (widget) => @widgets.remove(widget)
+				add: => @selectedWidget(new Widget({ isNew: true }))
+				save: =>
+					widget = @selectedWidget()
+					widget.save()
+					if widget.isNew
+						@widgets.push(widget)
+						widget.isNew = false
+					@selectedWidget(null)
+				cancel: =>
+					@selectedWidget().cancel()
+					@selectedWidget(null);
+
+			ko.bindingHandlers.widgetEditor =
+				init: (element, valueAccessor) => $(element).hide()
+				update: (element, valueAccessor) =>
+					value = ko.utils.unwrapObservable(valueAccessor())
+					if value then $(element).fadeIn() else $(element).fadeOut()
+
+			ko.applyBindings(new ViewModel([
+				new Widget({ name: 'First Widget', price: 12.34 }),
+				new Widget({ name: 'Widget the Second', price: 56.78 })
+			]))
+		</script>
+	</body>
+</html>

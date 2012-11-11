@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8"/>
+		<!--[if lt IE 9]>
+		    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<script src="js/jquery.js"></script>
+		<script src="js/jquery.tmpl.js"></script>
+		<script src="js/knockout-2.2.0.js"></script>
+	</head>
+	<body>
+		<table>
+			<thead>
+				<tr><th>Name</th><th>Price</th><th>Controls</th></tr>
+			</thead>
+			<tbody data-bind="foreach: widgets">
+				<tr>
+					<td data-bind="text: name"></td>
+					<td data-bind="text: formattedPrice()"></td>
+					<td>
+						<button data-bind="click: $root.edit">Edit</button>
+						<button data-bind="click: $root.remove">Remove</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<p><button data-bind="click: add">Add</button></p>
+
+
+		<div id="details" data-bind="template: { name: 'editor_template', data: selectedWidget }, widgetEditor: selectedWidget"></div>
+		<script id="editor_template" type="text/html">
+			<label>Name: <input data-bind="value: editName"/></label><br/>
+			<label>Price: <input data-bind="value: editPrice"/></label><br/>
+			<button data-bind="click: $root.cancel">Cancel</button>
+			<button data-bind="click: $root.save">Save</button>
+		</script>
+
+		<pre data-bind="text: ko.toJSON(widgets)"></pre>
+		<pre data-bind="text: ko.toJSON(selectedWidget)"></pre>
+
+
+		<script>
+			$(function(){
+				var Widget = function(data) {
+					var self = this;
+					self.name = ko.observable(data.name);
+					self.editName = ko.observable(data.name);
+					self.price = ko.observable(data.price);
+					self.editPrice = ko.observable(data.price);
+					self.isNew = data.isNew;
+					self.formattedPrice = function() { return '$' + self.price().toFixed(2); };
+					self.save = function() {
+						self.name(self.editName());
+						self.price(parseFloat(self.editPrice()));
+					};
+					self.cancel = function() {
+						self.editName(self.name());
+						self.editPrice(self.price());
+					};
+				};
+
+				var ViewModel = function(widgets) {
+					var self = this;
+					self.widgets = ko.observableArray(widgets);
+					self.selectedWidget = ko.observable();
+					self.edit = function(widget) { self.selectedWidget(widget); };
+					self.remove = function(widget) { self.widgets.remove(widget); };
+					self.add = function() {
+						self.selectedWidget(new Widget({
+							name: 'new',
+							price: 1.23,
+							isNew: true
+						}));
+					};
+					self.save = function(){
+						var widget = self.selectedWidget();
+						widget.save();
+						if (widget.isNew) {
+							widget.isNew = false;
+							self.widgets.push(widget);
+						}
+						self.selectedWidget(null);
+					};
+					self.cancel = function() {
+						self.selectedWidget().cancel();
+						self.selectedWidget(null);
+					};
+				};
+
+				ko.bindingHandlers.widgetEditor = {
+					init: function(element, valueAccessor) {
+						$(element).hide();
+					},
+					update: function(element, valueAccessor) {
+						var value = ko.utils.unwrapObservable(valueAccessor());
+						value ? $(element).fadeIn() : $(element).fadeOut();
+					}
+				};
+
+				ko.applyBindings(new ViewModel([
+					new Widget({ name: 'First Widget', price: 12.34 }),
+					new Widget({ name: 'Widget the Second', price: 56.78 })
+				]));
+			});
+		</script>
+	</body>
+</html>
