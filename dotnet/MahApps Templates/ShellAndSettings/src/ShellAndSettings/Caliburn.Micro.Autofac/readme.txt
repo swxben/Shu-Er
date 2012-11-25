@@ -1,0 +1,1 @@
+﻿As at 2012-11-25, the current Caliburn.Micro.Autofac NuGet package (1.4.1) doesn't work with the current version of Caliburn.Micro (1.4) so I've included the Autofac bootstrapper for Caliburn.Micro directly in the project.
