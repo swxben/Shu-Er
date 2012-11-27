@@ -19,6 +19,7 @@ namespace SwxBen
             object where = null,
             string orderBy = null
             ) where T : new();
+        Exception TestConnection();
     }
 
     public class DataAccess : IDataAccess
@@ -93,7 +94,7 @@ namespace SwxBen
             if (value != null && value is string)
             {
                 if (type.IsEnum) return Enum.Parse(type, value as string);
-                
+
                 var underlyingType = Nullable.GetUnderlyingType(type);
 
                 if (underlyingType == null) return value;
@@ -245,6 +246,22 @@ IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[{0}]')
     DROP TABLE {0}", tableName);
 
             ExecuteCommand(sql);
+        }
+
+        public Exception TestConnection()
+        {
+            try
+            {
+                using (var connection = new SqlConnection(_connectionString))
+                {
+                    connection.Open();
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
         }
     }
 }
