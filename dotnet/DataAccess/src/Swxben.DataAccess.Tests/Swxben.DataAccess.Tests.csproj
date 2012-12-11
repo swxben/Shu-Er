@@ -54,6 +54,7 @@
     <Compile Include="can_insert_null_into_a_column.cs" />
     <Compile Include="can_read_and_write_enums_as_a_string_field.cs" />
     <Compile Include="can_read_and_write_nullable_enums_as_string.cs" />
+    <Compile Include="can_select_in_to_a_class_with_read_only_properties.cs" />
     <Compile Include="can_use_a_simple_table.cs" />
     <Compile Include="get_insert_sql_is_sane.cs" />
     <Compile Include="get_select_sql_is_sane.cs" />

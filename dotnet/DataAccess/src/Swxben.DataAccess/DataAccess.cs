@@ -76,7 +76,7 @@ namespace SwxBen
                 var resultDictionary = result as IDictionary<string, object>;
                 var t = new T();
 
-                foreach (var property in typeof(T).GetProperties().Where(p => resultDictionary.ContainsKey(p.Name)))
+                foreach (var property in typeof(T).GetProperties().Where(p => resultDictionary.ContainsKey(p.Name) && p.CanWrite))
                 {
                     property.SetValue(t, GetValue(resultDictionary[property.Name], property.PropertyType), null);
                 }
