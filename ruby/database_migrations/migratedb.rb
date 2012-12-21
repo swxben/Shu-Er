@@ -4,7 +4,7 @@ require 'win32ole'
 class MigrateDB
 	PathToMigrations = 'upsql/'
 	MigrationsFilePattern = "*.sql"
-	DefaultDatabase = 'default_database_name'
+	DefaultDatabase = 'database_integration,database_uat'
 	DefaultServer = '.\\SQLEXPRESS'
 
 	def execute()
@@ -13,28 +13,32 @@ class MigrateDB
 		self.getConfigurationFromUser()
 		puts ''
 		
-		puts 'Running bootstrap'
-		self.doMigration("#{PathToMigrations}bootstrap.sql")
-		
-		puts "Initial migration level: #{self.getCurrentMigrationLevel()}"
-		
-		puts 'Starting migrations'
-		pattern = PathToMigrations + MigrationsFilePattern
-		migrationLevel = self.getCurrentMigrationLevel
-		Dir[pattern].select{|f| not f['_'].nil?}.sort.each do |f|		
-			baseName = File.basename(f)
-			fileLevel = baseName.split('_')[0].to_i
-			description = baseName.gsub('_', ' ').split('.')[0]
+		@database.split(/,/).each do |db|
+			puts
+			puts "Database #{db}"
+			puts 'Running bootstrap'
+			self.doMigration(db, "#{PathToMigrations}bootstrap.sql")
+
+			puts "Initial migration level: #{self.getCurrentMigrationLevel(db)}"
+			puts 'Starting migrations'
+
+			pattern = PathToMigrations + MigrationsFilePattern
+			migrationLevel = self.getCurrentMigrationLevel(db)
+			Dir[pattern].select{|f| not f['_'].nil?}.sort.each do |f|		
+				baseName = File.basename(f)
+				fileLevel = baseName.split('_')[0].to_i
+				description = baseName.gsub('_', ' ').split('.')[0]
+				
+				if fileLevel > migrationLevel
+					puts "Applying migration #{fileLevel}: #{description}"
+					self.doMigration(db, f)
+					migrationLevel = self.getCurrentMigrationLevel(db)
+				end
+			end		
+			puts "Completed migrations for #{db}"
 			
-			if fileLevel > migrationLevel
-				puts "Applying migration #{fileLevel}: #{description}"
-				self.doMigration(f)
-				migrationLevel = self.getCurrentMigrationLevel
-			end
-		end		
-		puts 'Completed migrations'
-		
-		puts 'Current migration level: ' + self.getCurrentMigrationLevel().to_s
+			puts 'Current migration level: ' + self.getCurrentMigrationLevel(db).to_s
+		end
 	end
 	
 	def getConfigurationFromUser()
@@ -54,20 +58,19 @@ class MigrateDB
 		@password = $stdin.gets.chomp
 	end
 	
-	def doMigration(filename)
-		cmd = "osql -S #{@server} -U #{@username} -P #{@password} -d #{@database} -i \"#{filename}\""
-		#puts cmd
+	def doMigration(db, filename)
+		cmd = "osql -S #{@server} -U #{@username} -P #{@password} -d #{db} -i \"#{filename}\""
 		puts `#{cmd}`
 	end
 	
-	def getCurrentMigrationLevel()
-		data = self.executeQuery("SELECT ISNULL(MAX(Migration), -1) FROM DBMigrations")
+	def getCurrentMigrationLevel(db)
+		data = self.executeQuery(db, "SELECT ISNULL(MAX(Migration), -1) FROM DBMigrations")
 		return -1 if data.empty?
 		return data.first.first
 	end
 	
-	def executeQuery(sql)
-		connectionString = "Provider=SQLOLEDB.1;Data Source=#{@server};Initial Catalog=#{@database};User ID=#{@username};Password=#{@password}"
+	def executeQuery(db, sql)
+		connectionString = "Provider=SQLOLEDB.1;Data Source=#{@server};Initial Catalog=#{db};User ID=#{@username};Password=#{@password}"
  		con = WIN32OLE.new('ADODB.Connection');
 		con.Open(connectionString)
 
