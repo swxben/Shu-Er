@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>***IDENTIFIER FOR NUGET, this never changes***</id>
+    <version>0.0.0</version>
+    <title>***TITLE OF THE PACKAGE***</title>
+    <authors>Software By Ben, Ben Scott</authors>
+    <owners>Software by Ben, Ben Scott</owners>
+    <licenseUrl>http://creativecommons.org/licenses/by-sa/3.0/</licenseUrl>
+    <projectUrl>https://github.com/owner/repo</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>***DESCRIPTION***</description>
+    <summary>***SUMMARY***</summary>
+    <releaseNotes>***NOTES FOR CURRENT VERSION***</releaseNotes>
+    <tags>*** SPACE SEPARATED TAGS***</tags>
+
+    <!-- remove if not needed -->
+    <dependencies>
+      <dependency id="IKVM" version="7.2.4630.5"/>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="src\project\bin\Release\project.dll" target="lib\net40\project.dll" />
+  </files>
+</package>
